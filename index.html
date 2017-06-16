@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="/framework/bootstrap-3.3.7/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="/framework/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <!-- JQuery -->
+    <script src="/framework/jquery-3.2.1.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/framework/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            position: relative;
+        }
+    </style>
+
+    <script src="/main.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+    <title>扫雷</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>扫雷</h1>
+      <div class="row">
+	<div class="col-xs-12">
+	  <select name="size" id="size">
+	    <option value="8x8">8x8</option>
+	    <option value="16x16">16x16</option>
+	  </select>
+	  <select name="total" id="total">
+	    <option value="10">10 Mines</option>
+	    <option value="40">40 Mines</option>
+	  </select>
+	  <button id="startGame">Start!</button>
+	</div>
+      </div>
+      <div class="row game">
+	<div class="col-xs-12 col-md-9 scoreboard">
+	  <p><span class="glyphicon glyphicon-flag"></span><span id="flag-count">0</span></p>
+	  <p><span class="glyphicon glyphicon-time"></span><span id="time">00:00:00</span></p>
+	</div>
+	<div class="col-xs-12 col-md-3 mines-area">
+	  
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
