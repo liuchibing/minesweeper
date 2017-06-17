@@ -1,12 +1,8 @@
-$(document).ready(function() {
-    $("#startGame").click(function() {
-	var size = document.getElementById("size").selectedIndex;
-	var total = document.getElementById("total").selectedIndex;
-	//alert(size);alert(total);
-	init(size, total);
-	$(".game").show();
-    });
-});
+//构建一个Box
+function box(isMine, node) {
+    this.isMine = isMine;
+    this.node = node;
+}
 
 //根据设置初始化游戏区域
 function init(size, total) {
@@ -30,5 +26,27 @@ function init(size, total) {
 	break;
     }
     //生成地图
-    
+    var map = new Array();
+    for(i = 0; i < totalRows; i++) {
+	map[i] = new Array();
+	var parent = $("<div></div>");
+	parent.addClass("row");
+	for(j = 0; j < totalCols; j++) {
+	    var node = $("<div></div>");
+	    node.addClass("col-xs-1 mineBox unkownBox");
+	    parent.append(node);
+	    map[i][j] = new box(false, node);
+	}
+	$(".mines-area").append(parent);
+    }
 }
+
+$(document).ready(function() {
+    $("#startGame").click(function() {
+	var size = document.getElementById("size").selectedIndex;
+	var total = document.getElementById("total").selectedIndex;
+	//alert(size);alert(total);
+	init(size, total);
+	$(".game").show();
+    });
+});
