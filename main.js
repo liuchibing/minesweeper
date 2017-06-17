@@ -4,6 +4,12 @@ function box(isMine, node) {
     this.node = node;
 }
 
+function randomPosition(max) {
+    return Math.round(Math.random()*max);
+}
+
+var map;
+
 //根据设置初始化游戏区域
 function init(size, total) {
     //判断雷区大小
@@ -26,18 +32,28 @@ function init(size, total) {
 	break;
     }
     //生成地图
-    var map = new Array();
+    map = new Array();
     for(i = 0; i < totalRows; i++) {
 	map[i] = new Array();
 	var parent = $("<div></div>");
-	parent.addClass("row");
 	for(j = 0; j < totalCols; j++) {
 	    var node = $("<div></div>");
-	    node.addClass("col-xs-1 mineBox unkownBox");
+	    node.addClass("mineBox unkownBox");
+	    node.attr("data-x", i);
+	    node.attr("data-y", j);
+	    if(j == 0) { node.css("clear", "left"); }
 	    parent.append(node);
 	    map[i][j] = new box(false, node);
 	}
 	$(".mines-area").append(parent);
+    }
+    //生成地雷
+    for(i = 0; i < totalMines; i++) {
+	var x = randomPosition(totalCols);
+	var y = randomPosition(totalRows);
+	if(!(map[y][x].isMine)) {
+	    map[y][x].isMine = true;
+	}
     }
 }
 
