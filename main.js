@@ -32,6 +32,7 @@ function init(size, total) {
     //清理
     $(".mines-area").empty();
     clearTimeout(timeout);
+    timeout = null;
     marks = 0;
     correctMarks = 0;
     time = new Date();
