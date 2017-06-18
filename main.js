@@ -29,6 +29,12 @@ function nextSecond() {
 
 //根据设置初始化游戏区域
 function init(size, total) {
+    //清理
+    $(".mines-area").empty();
+    clearTimeout(timeout);
+    marks = 0;
+    correctMarks = 0;
+    time = new Date();
     //判断雷区大小
     switch(size) {
     case 0: totalCols = 8;
