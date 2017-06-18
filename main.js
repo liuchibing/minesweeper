@@ -97,6 +97,7 @@ function mark(x, y) {
 
 $(document).ready(function() {
     $("#startGame").click(function() {
+	$(".game").hide();
 	var size = document.getElementById("size").selectedIndex;
 	var total = document.getElementById("total").selectedIndex;
 	//alert(size);alert(total);
