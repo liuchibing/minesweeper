@@ -9,12 +9,27 @@ function randomPosition(max) {
 }
 
 var map;
+var totalCols;
+var totalRows;
+var totalMines;
+var marks = 0;
+var correctMarks = 0;
+var time = new Date();
+var timeout;
+
+function updateFlagCount() {
+    $("#flag-count").text(marks + "/" + totalMines);
+}
+
+function nextSecond() {
+    timeout = setTimeout("nextSecond()", 1000);
+    time.setSeconds(time.getSeconds()+1);
+    $("#time").text(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+}
 
 //根据设置初始化游戏区域
 function init(size, total) {
     //判断雷区大小
-    var totalCols;
-    var totalRows;
     switch(size) {
     case 0: totalCols = 8;
 	totalRows = 8;
@@ -24,7 +39,6 @@ function init(size, total) {
 	break;
     }
     //判断总雷数
-    var totalMines;
     switch(total) {
     case 0: totalMines = 10;
 	break;
@@ -53,8 +67,26 @@ function init(size, total) {
 	var y = randomPosition(totalRows);
 	if(!(map[y][x].isMine)) {
 	    map[y][x].isMine = true;
+	} else {
+	    i--;
+	    continue;
 	}
     }
+    //设置计数
+    updateFlagCount();
+    //设置计时
+    time.setHours(0);
+    time.setMinutes(0);
+    time.setSeconds(0);
+    t = setTimeout("nextSecond()", 1000);
+}
+
+function open(x, y) {
+    
+}
+
+function mark(x, y) {
+
 }
 
 $(document).ready(function() {
