@@ -78,7 +78,7 @@ function init(size, total) {
     time.setHours(0);
     time.setMinutes(0);
     time.setSeconds(0);
-    t = setTimeout("nextSecond()", 1000);
+    timeout = setTimeout("nextSecond()", 1000);
 }
 
 function open(x, y) {
