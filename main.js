@@ -53,9 +53,9 @@ function init(size, total) {
 	break;
     }
     //生成地图
-    map = new Array();
+    map = new Array(totalRows);
     for(i = 0; i < totalRows; i++) {
-	map[i] = new Array();
+	map[i] = new Array(totalCols);
 	var parent = $("<div></div>");
 	for(j = 0; j < totalCols; j++) {
 	    var node = $("<div></div>");
@@ -102,7 +102,12 @@ $(document).ready(function() {
 	var size = document.getElementById("size").selectedIndex;
 	var total = document.getElementById("total").selectedIndex;
 	//alert(size);alert(total);
-	init(size, total);
+	try {
+	    init(size, total);
+	} catch (e) {
+	    alert(e);
+	    alert(e.stack)
+	}
 	$(".game").show();
     });
 });
