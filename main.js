@@ -53,8 +53,8 @@ function init(size, total) {
 	for(j = 0; j < totalCols; j++) {
 	    var node = $("<div></div>");
 	    node.addClass("mineBox unkownBox");
-	    node.attr("data-x", i);
-	    node.attr("data-y", j);
+	    node.attr("data-x", j);
+	    node.attr("data-y", i);
 	    if(j == 0) { node.css("clear", "left"); }
 	    parent.append(node);
 	    map[i][j] = new box(false, node);
