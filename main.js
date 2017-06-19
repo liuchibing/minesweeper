@@ -2,6 +2,7 @@
 function box(isMine, node) {
     this.isMine = isMine;
     this.node = node;
+    this.status = 0;//0:normal 1:opened -1:marked
 }
 
 function randomPosition(max) {
@@ -16,6 +17,7 @@ var marks = 0;
 var correctMarks = 0;
 var time = new Date();
 var timeout;
+var markMode = false;
 
 function updateFlagCount() {
     $("#flag-count").text(marks + "/" + totalMines);
@@ -35,6 +37,8 @@ function init(size, total) {
     timeout = null;
     marks = 0;
     correctMarks = 0;
+    $("#toggleMode").text("翻开模式");
+    markMode = false;
     time = new Date();
     //判断雷区大小
     switch(size) {
@@ -62,6 +66,7 @@ function init(size, total) {
 	    node.addClass("mineBox unkownBox");
 	    node.attr("data-x", j);
 	    node.attr("data-y", i);
+	    //node.text(" ");
 	    if(j == 0) { node.css("clear", "left"); }
 	    parent.append(node);
 	    map[i][j] = new box(false, node);
@@ -74,6 +79,7 @@ function init(size, total) {
 	var y = randomPosition(totalRows);
 	if(!(map[y][x].isMine)) {
 	    map[y][x].isMine = true;
+	    map[y][x].node.css("background-color", "red");
 	} else {
 	    i--;
 	    continue;
@@ -82,18 +88,107 @@ function init(size, total) {
     //设置计数
     updateFlagCount();
     //设置计时
+    $("#time").text("0:0:0");
     time.setHours(0);
     time.setMinutes(0);
     time.setSeconds(0);
     timeout = setTimeout("nextSecond()", 1000);
+    //绑定点击事件
+    $(".mineBox").click(function(event) {
+	var x = parseInt($(this).attr("data-x"));
+	var y = parseInt($(this).attr("data-y"));
+	if (markMode) {
+	    mark(x, y);
+	} else {
+	    open(x, y);
+	}
+    });
+}
+
+function boom(x, y) {
+    alert("game over!");
+    finish();
+}
+
+function win() {
+    var p = $("<p></p>");
+    p.text("Congratulations!").css("color", "red");
+    $(".scoreboard").append(p);
+    finish();
+}
+
+function finish() {
+    clearTimeout(timeout);
 }
 
 function open(x, y) {
-    
+    var box = map[y][x];
+    if (box.isMine) {
+	boom(x, y);
+	return;
+    }
+    if (box.status == 0) {
+	box.node.addClass("openedBox");
+	box.status = 1;
+	var mineCount = 0;
+	var countMine = function(o) {
+	    if (o.isMine) mineCount++;
+	};
+	//查找周围的雷
+	if (y != 0) {
+	    if (x != 0) countMine(map[y-1][x-1]);
+	    countMine(map[y-1][x]);
+	    if (x != (totalCols - 1)) countMine(map[y-1][x+1]);
+	}
+	if (x != 0) countMine(map[y][x-1]);
+	if (x != (totalCols - 1)) countMine(map[y][x+1]);
+	if (y != (totalRows - 1)) {
+	    if (x != 0) countMine(map[y+1][x-1]);
+	    countMine(map[y+1][x]);
+	    if (x != (totalCols - 1)) countMine(map[y+1][x+1]);
+	}
+	if (mineCount == 0) {
+	    //自动翻开周围一圈
+	    if (y != 0) {
+		if (x != 0) open(x-1, y-1);
+		open(x, y-1);
+		if (x != (totalCols - 1)) open(x+1, y-1);
+	    }
+	    if (x != 0) open(x-1, y);
+	    if (x != (totalCols - 1)) open(x+1, y);
+	    if (y != (totalRows - 1)) {
+		if (x != 0) open(x-1, y+1);
+		open(x, y+1);
+		if (x != (totalCols - 1)) open(x+1, y+1);
+	    }
+	} else {
+	    //标记数字
+	    box.node.text(mineCount);
+	}
+    }
 }
 
 function mark(x, y) {
-
+    var box = map[y][x];
+    switch (box.status) {
+    case -1:
+	box.node.empty();
+	box.status = 0;
+	if (box.isMine) correctMarks--;
+	marks--;
+    case 0:
+	if(correctMarks <= totalMines) {
+	    var flag = $("<span></span>");
+	    flag.addClass("glyphicon glyphicon-flag");
+	    box.node.append(flag);
+	    box.status = -1;
+	    if (box.isMine) correctMarks++;
+	    marks++;
+	}
+		 break;}
+	
+    $("#flag-count").text(marks+"/"+totalMines);
+    if (correctMarks == totalMines) win();
 }
 
 $(document).ready(function() {
@@ -109,5 +204,14 @@ $(document).ready(function() {
 	    alert(e.stack)
 	}
 	$(".game").show();
+    });
+    $("#toggleMode").click(function() {
+	if (markMode) {
+	    markMode = false;
+	    $(this).text("翻开模式");
+	} else {
+	    markMode = true;
+	    $(this).text("标记模式");
+	}
     });
 });
