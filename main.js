@@ -165,12 +165,12 @@ function open(x, y) {
 		    break;
 		}
 	    }
-	    firstTap = false;
 	} else {
 	    boom(x, y);
 	    return;
 	}
     }
+    if (firstTap) firstTap = false; 
     if (box.status == 0) {
 	box.node.addClass("openedBox");
 	box.status = 1;
