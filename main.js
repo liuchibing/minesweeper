@@ -53,13 +53,13 @@ function init(size, total) {
 	break;
     case 1: totalCols = 16;
 	totalRows = 16;
-	if(screen.width < screen.height) {
+	if(window.width < window.height) {
 		$("#settings").append($('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
 	}
 	break;
     case 2: totalCols = 16;
 	totalRows = 30;
-	if(screen.width < screen.height) {
+	if(window.width < window.height) {
 		$("#settings").append($('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
 	}
 	break;
