@@ -178,7 +178,7 @@ function mark(x, y) {
 	marks--;
 	break;
     case 0:
-	if(correctMarks <= totalMines) {
+	if(marks <= totalMines) {
 	    var flag = $("<span></span>");
 	    flag.addClass("glyphicon glyphicon-flag");
 	    box.node.append(flag);
