@@ -159,6 +159,7 @@ function open(x, y) {
 		    break;
 		}
 	    }
+	    firstTap = false;
 	} else {
 	    boom(x, y);
 	    return;
