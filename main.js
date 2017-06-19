@@ -186,7 +186,8 @@ function mark(x, y) {
 	    if (box.isMine) correctMarks++;
 	    marks++;
 	}
-		 break;}
+	break;
+    }
 	
     $("#flag-count").text(marks+"/"+totalMines);
     if (correctMarks == totalMines) win();
