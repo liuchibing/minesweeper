@@ -176,6 +176,7 @@ function mark(x, y) {
 	box.status = 0;
 	if (box.isMine) correctMarks--;
 	marks--;
+	break;
     case 0:
 	if(correctMarks <= totalMines) {
 	    var flag = $("<span></span>");
