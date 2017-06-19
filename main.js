@@ -20,6 +20,7 @@ var timeout;
 var markMode = false;
 var totalBoxes;
 var openedBoxes = 0;
+var firstTap = true;
 
 function updateFlagCount() {
     $("#flag-count").text(marks + "/" + totalMines);
@@ -44,6 +45,7 @@ function init(size, total) {
     $("#toggleMode").text("翻开模式");
     markMode = false;
     time = new Date();
+    firstTap = true;
     //判断雷区大小
     switch(size) {
     case 0: totalCols = 8;
@@ -52,12 +54,17 @@ function init(size, total) {
     case 1: totalCols = 16;
 	totalRows = 16;
 	break;
+    case 2: totalCols = 16;
+	totalRows = 30;
+	break;
     }
     //判断总雷数
     switch(total) {
     case 0: totalMines = 10;
 	break;
     case 1: totalMines = 40;
+	break;
+    case 2: totalMines = 99;
 	break;
     }
     totalBoxes = totalCols*totalRows;
@@ -140,8 +147,22 @@ function finish() {
 function open(x, y) {
     var box = map[y][x];
     if (box.isMine) {
-	boom(x, y);
-	return;
+	//防止一开始就失败
+	if(firstTap) {
+	    box.isMine = false;
+	    while(true) {
+		var x = randomPosition(totalCols);
+		var y = randomPosition(totalRows);
+		if(!(map[y][x].isMine)) {
+		    map[y][x].isMine = true;
+		    //map[y][x].node.css("background-color", "red");
+		    break;
+		}
+	    }
+	} else {
+	    boom(x, y);
+	    return;
+	}
     }
     if (box.status == 0) {
 	box.node.addClass("openedBox");
