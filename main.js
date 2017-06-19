@@ -18,6 +18,8 @@ var correctMarks = 0;
 var time = new Date();
 var timeout;
 var markMode = false;
+var totalBoxes;
+var openedBoxes = 0;
 
 function updateFlagCount() {
     $("#flag-count").text(marks + "/" + totalMines);
@@ -32,11 +34,13 @@ function nextSecond() {
 //根据设置初始化游戏区域
 function init(size, total) {
     //清理
+    $(".congr").remove();
     $(".mines-area").empty();
     clearTimeout(timeout);
     timeout = null;
     marks = 0;
     correctMarks = 0;
+    openedBoxes = 0;
     $("#toggleMode").text("翻开模式");
     markMode = false;
     time = new Date();
@@ -56,6 +60,7 @@ function init(size, total) {
     case 1: totalMines = 40;
 	break;
     }
+    totalBoxes = totalCols*totalRows;
     //生成地图
     map = new Array(totalRows);
     for(i = 0; i < totalRows; i++) {
@@ -79,7 +84,7 @@ function init(size, total) {
 	var y = randomPosition(totalRows);
 	if(!(map[y][x].isMine)) {
 	    map[y][x].isMine = true;
-	    map[y][x].node.css("background-color", "red");
+	    //map[y][x].node.css("background-color", "red");
 	} else {
 	    i--;
 	    continue;
@@ -94,7 +99,7 @@ function init(size, total) {
     time.setSeconds(0);
     timeout = setTimeout("nextSecond()", 1000);
     //绑定点击事件
-    $(".mineBox").click(function(event) {
+    $(".mineBox").on("click", function() {
 	var x = parseInt($(this).attr("data-x"));
 	var y = parseInt($(this).attr("data-y"));
 	if (markMode) {
@@ -102,22 +107,33 @@ function init(size, total) {
 	} else {
 	    open(x, y);
 	}
+	if (openedBoxes == (totalBoxes - totalMines)) win();
     });
 }
 
 function boom(x, y) {
-    alert("game over!");
+    var box = map[y][x];
+    box.node.css("color", "red");
+    for(var i = 0; i < totalRows; i++) {
+	for(var j = 0; j < totalCols; j++) {
+	    if(map[i][j].isMine) map[i][j].node.append($("<span></span>").addClass("glyphicon glyphicon-certificate"));
+	}
+    }
+    var p = $("<p></p>");
+    p.text("Game over!").css("color", "red").addClass("congr");
+    $(".scoreboard").append(p);
     finish();
 }
 
 function win() {
     var p = $("<p></p>");
-    p.text("Congratulations!").css("color", "red");
+    p.text("Congratulations!").css("color", "red").addClass("congr");
     $(".scoreboard").append(p);
     finish();
 }
 
 function finish() {
+    $(".mineBox").off("click");
     clearTimeout(timeout);
 }
 
@@ -130,11 +146,12 @@ function open(x, y) {
     if (box.status == 0) {
 	box.node.addClass("openedBox");
 	box.status = 1;
+	openedBoxes++;
+	//查找周围的雷
 	var mineCount = 0;
 	var countMine = function(o) {
 	    if (o.isMine) mineCount++;
 	};
-	//查找周围的雷
 	if (y != 0) {
 	    if (x != 0) countMine(map[y-1][x-1]);
 	    countMine(map[y-1][x]);
@@ -178,19 +195,15 @@ function mark(x, y) {
 	marks--;
 	break;
     case 0:
-	if(marks <= totalMines) {
-	    var flag = $("<span></span>");
-	    flag.addClass("glyphicon glyphicon-flag");
-	    box.node.append(flag);
-	    box.status = -1;
-	    if (box.isMine) correctMarks++;
-	    marks++;
-	}
+	var flag = $("<span></span>");
+	flag.addClass("glyphicon glyphicon-flag");
+	box.node.append(flag);
+	box.status = -1;
+	if (box.isMine) correctMarks++;
+	marks++;
 	break;
     }
-	
-    $("#flag-count").text(marks+"/"+totalMines);
-    if (correctMarks == totalMines) win();
+    updateFlagCount();
 }
 
 $(document).ready(function() {
