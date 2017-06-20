@@ -157,11 +157,11 @@ function open(x, y) {
 	if(firstTap) {
 	    box.isMine = false;
 	    while(true) {
-		var x = randomPosition(totalCols);
-		var y = randomPosition(totalRows);
-		if(!(map[y][x].isMine)) {
-		    map[y][x].isMine = true;
-		    //map[y][x].node.css("background-color", "red");
+		var nx = randomPosition(totalCols);
+		var ny = randomPosition(totalRows);
+		if(!(map[ny][nx].isMine)) {
+		    map[ny][nx].isMine = true;
+		    //map[ny][nx].node.css("background-color", "red");
 		    break;
 		}
 	    }
