@@ -54,13 +54,13 @@ function init(size, total) {
     case 1: totalCols = 16;
 	totalRows = 16;
 	if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
-		$("#settings").append($('<div class="alert alert-warn alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
+		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
 	}
 	break;
     case 2: totalCols = 16;
 	totalRows = 30;
 	if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
-		$("#settings").append($('<div class="alert alert-warn alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
+		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
 	}
 	break;
     }
