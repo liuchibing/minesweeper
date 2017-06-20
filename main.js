@@ -129,7 +129,8 @@ function boom(x, y) {
     box.node.css("color", "red");
     for(var i = 0; i < totalRows; i++) {
 	for(var j = 0; j < totalCols; j++) {
-	    if(map[i][j].isMine) map[i][j].node.append($("<span></span>").addClass("glyphicon glyphicon-certificate"));
+	    if(map[i][j].status == -1 &&!(map[i][j].isMine)) map[i][j].node.empty().append($("<span></span>").addClass("glyphicon glyphicon-ban-circle"));
+	    if(map[i][j].isMine && map[i][j].status != -1) map[i][j].node.append($("<span></span>").addClass("glyphicon glyphicon-certificate"));
 	}
     }
     var p = $("<p></p>");
