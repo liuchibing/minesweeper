@@ -17,11 +17,7 @@ div.game {
     background-color: #E8E8E8;
 }
 
-.congr {
-    margin-top: 50px;
-}
-
 .affix {
-    /*top: 10px;
-    left:10px;*/
+    top: 10px;
+    background-color: white;
 }

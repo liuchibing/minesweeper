@@ -258,4 +258,12 @@ $(document).ready(function() {
 	    $(this).text("标记模式");
 	}
     });
+    if (window.innerWidth < 768) {
+	$(".scoreboard").on("affixed.bs.affix", function() {
+	    $(".mines-area").css("margin-top", "95px");
+	});
+	$(".scoreboard").on("affixed-top.bs.affix", function() {
+	    $(".mines-area").css("margin-top", "0");
+	});
+    }
 });
