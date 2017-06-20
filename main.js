@@ -153,7 +153,7 @@ function finish() {
 
 function open(x, y) {
     var box = map[y][x];
-    if (box.isMine) {
+    if (box.isMine && box.status == 0) {
 	//防止一开始就失败
 	if(firstTap) {
 	    box.isMine = false;
