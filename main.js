@@ -6,11 +6,11 @@ function box(isMine, node) {
 }
 
 function randomPosition(max) {
-    if(max <= 2) {
-	return Math.round(Math.random()*(max-1));
-    } else {
-	return Math.floor(Math.random()*(max-1));
-    }
+    //if(max <= 2) {
+    return Math.round(Math.random()*(max-1));
+    //} else {
+	//return Math.floor(Math.random()*(max-1));
+    //}
 }
 
 var map;
