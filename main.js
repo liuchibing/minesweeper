@@ -259,6 +259,11 @@ $(document).ready(function() {
 	    break;
 	}
 	totalBoxes = totalCols*totalRows;
+	//security check
+	if(totalBoxes <= totalMines) {
+	    alert("雷的数量必须比总格数少");
+	    return;
+	}
 	//alert(size);alert(total);
 	try {
 	    init();
