@@ -28,17 +28,23 @@
       <h1>扫雷</h1>
       <div class="row">
 	<div class="col-xs-12 form-group" id="settings">
-	  <select name="size" id="size" class="form-control" style="width: 40%; display: inline;">
-	    <option value="8x8">8x8</option>
-	    <option value="16x16">16x16</option>
-	    <option value="16x30">16x30</option>
+	  <select name="size" id="size" class="form-control" style="width: 80%; display: inline;" onchange="sizeChange(this)">
+	    <option value="8x8">8x8 10 Mines</option>
+	    <option value="16x16">16x16 40 Mines</option>
+	    <option value="16x30">16x30 99 Mines</option>
+	    <option value="modified">自定义</option>
 	  </select>
-	  <select name="total" id="total" class="form-control" style="width: 40%; display: inline;">
+	  <!--<select name="total" id="total" class="form-control" style="width: 40%; display: inline;">
 	    <option value="10">10 Mines</option>
 	    <option value="40">40 Mines</option>
 	    <option value="99">99 Mines</option>
-	  </select>
+	  </select>-->
 	  <button id="startGame" class="btn" style="width: 20% display: inline;">Start!</button>
+	</div>
+	<div class="col-xs-12 form-group" style="display: none;" id="modifying">
+	  <input type="text" class="form-control" id="cols" style="display: inline; width: 20%" />
+	  x<input type="text" class="form-control" id="rows" style="display: inline; width: 20%; margin-left: 5px;" />
+	  <input type="text" class="form-control" id="mines" style="display: inline; width: 20%" /> Mines
 	</div>
       </div>
       <div class="row game">

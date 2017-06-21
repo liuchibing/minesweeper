@@ -6,7 +6,11 @@ function box(isMine, node) {
 }
 
 function randomPosition(max) {
-    return Math.round(Math.random()*(max-1));
+    if(max <= 2) {
+	return Math.round(Math.random()*(max-1));
+    } else {
+	return Math.floor(Math.random()*(max-1));
+    }
 }
 
 var map;
@@ -33,7 +37,7 @@ function nextSecond() {
 }
 
 //根据设置初始化游戏区域
-function init(size, total) {
+function init() {
     //清理
     $(".congr").remove();
     $(".mines-area").empty();
@@ -45,39 +49,11 @@ function init(size, total) {
     $("#toggleMode").text("翻开模式");
     markMode = false;
     time = new Date();
-    firstTap = true;
-    //判断雷区大小
-    switch(size) {
-    case 0: totalCols = 8;
-	totalRows = 8;
-	break;
-    case 1: totalCols = 16;
-	totalRows = 16;
-	if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
-		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
-	}
-	break;
-    case 2: totalCols = 16;
-	totalRows = 30;
-	if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
-		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
-	}
-	break;
-    }
-    //判断总雷数
-    switch(total) {
-    case 0: totalMines = 10;
-	break;
-    case 1: totalMines = 40;
-	break;
-    case 2: totalMines = 99;
-	break;
-    }
-    totalBoxes = totalCols*totalRows;
+    firstTap = true;    
     //生成地图
-    map = new Array(totalRows);
+    map = new Array();
     for(i = 0; i < totalRows; i++) {
-	map[i] = new Array(totalCols);
+	map[i] = new Array();
 	var parent = $("<div></div>");
 	for(j = 0; j < totalCols; j++) {
 	    var node = $("<div></div>");
@@ -160,9 +136,10 @@ function open(x, y) {
 	    while(true) {
 		var nx = randomPosition(totalCols);
 		var ny = randomPosition(totalRows);
-		if(!(map[ny][nx].isMine)) {
+		if(!(map[ny][nx].isMine) && map[ny][nx] !== box) {
 		    map[ny][nx].isMine = true;
 		    //map[ny][nx].node.css("background-color", "red");
+		    //alert("new mine: " + nx + ","+ ny);
 		    break;
 		}
 	    }
@@ -235,14 +212,56 @@ function mark(x, y) {
     updateFlagCount();
 }
 
+function sizeChange(obj) {
+    if(obj.selectedIndex == 3) {
+	$("#modifying").show();
+    } else {
+	$("#modifying").hide();
+    }
+}
+
 $(document).ready(function() {
     $("#startGame").click(function() {
 	$(".game").hide();
 	var size = document.getElementById("size").selectedIndex;
-	var total = document.getElementById("total").selectedIndex;
+	var total = document.getElementById("size").selectedIndex;
+	//判断雷区大小
+	switch(size) {
+	case 0: totalCols = 8;
+	    totalRows = 8;
+	    break;
+	case 1: totalCols = 16;
+	    totalRows = 16;
+	    if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
+		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
+	    }
+	    break;
+	case 2: totalCols = 16;
+	    totalRows = 30;
+	    if((window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
+		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
+	    }
+	    break;
+	case 3: totalCols = parseInt($("#cols").val());
+	    totalRows = parseInt($("#rows").val());
+	    totalMines = parseInt($("#mines").val());
+	    if(totalCols > 10 && (window.innerWidth < window.innerHeight) && window.innerWidth < 768) {
+		$("#settings").append($('<div class="alert alert-warning alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>建议横屏尝试</div>'));
+	    }
+	}
+	//判断总雷数
+	switch(total) {
+	case 0: totalMines = 10;
+	    break;
+	case 1: totalMines = 40;
+	    break;
+	case 2: totalMines = 99;
+	    break;
+	}
+	totalBoxes = totalCols*totalRows;
 	//alert(size);alert(total);
 	try {
-	    init(size, total);
+	    init();
 	} catch (e) {
 	    alert(e);
 	    alert(e.stack)
@@ -258,12 +277,14 @@ $(document).ready(function() {
 	    $(this).text("标记模式");
 	}
     });
-    if (window.innerWidth < 768) {
-	$(".scoreboard").on("affixed.bs.affix", function() {
+    $(".scoreboard").on("affixed.bs.affix", function() {
+	if (window.innerWidth < 768) {
 	    $(".mines-area").css("margin-top", "95px");
-	});
-	$(".scoreboard").on("affixed-top.bs.affix", function() {
+	};
+    });
+    $(".scoreboard").on("affixed-top.bs.affix", function() {
+	if (window.innerWidth < 768) {
 	    $(".mines-area").css("margin-top", "0");
-	});
-    }
+	}
+    });
 });
